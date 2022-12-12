@@ -8,5 +8,10 @@ package exceptions;
  * 
  */
 public class MemberAlreadyExistsException extends Exception {
-
+	
+	private String login;
+	
+	public MemberAlreadyExistsException(String login) {
+		this.login = login;
+	}
 }
