@@ -17,7 +17,7 @@ public class Review {
 	public Review(Member member, String title, float mark, String comment, Item item) {
 		
 		this.member = member; 
-		this.title = title; 
+		this.title = title; //title of the review 
 		this.mark = mark; 
 		this.comment = comment; 
 		this.item = item; 
@@ -31,6 +31,15 @@ public class Review {
 	     * @return mark attributed by the review in the <i>SocialNetwork</i>
 	     */
 		return this.mark; 
+	}
+	
+	public String getTitle() {
+		/**
+	     * Get the title of the review in the <i>SocialNetwork</i>
+	     * 
+	     * @return the title of the review in the <i>SocialNetwork</i>
+	     */
+		return this.title; 
 	}
 
 	public String getComment() {
@@ -69,12 +78,26 @@ public class Review {
 	     * the comment written and the mark attributed.
 	     */
 		
-		String s = this.getWriter().getLogin() + " a attribué la note de " + this.getMark() + " à l'oeuvre intitulée this.getItem().getTitle()" + " par this.getItem().getAuthor()"; //à compléter
+		String s = "L'utilisateur " + this.getWriter().getLogin() + " a attribué la note de " + this.getMark(); 
+		
+		s+= " à l'oeuvre intitulée " + this.getItem().getTitle(); 
+		
+				
 		return s; 
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		Item item1 = new Item("Avatar 2", "film"); 
+		
+		Member bob = new Member("bob", "motdepasse", "amateur de cinéma"); 
+		String title1 = "Mon avis sur Avatar 2"; 
+		String comment1 = "J'ai adoré ce film, je recommande !"; 
+		
+		Review review1 = new Review(bob, title1, 9, comment1, item1); 
+		
+		System.out.println(review1.toString());
 
 	}
 

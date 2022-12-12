@@ -1,5 +1,9 @@
 package opinion;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 public class Member {
 	
 	// ATTRIBUTES 
@@ -9,7 +13,7 @@ public class Member {
 	
 	private String description; 
 	
-	//private LinkedList<Review> reviews; 
+	private Map<Item, Review> reviews; 
 	
 	
 	//CONSTRUCTOR 
@@ -18,7 +22,7 @@ public class Member {
 		this.login = login; 
 		this.password = password; 
 		this.description = description; //Biographie du membre sur le réseau
-		//this.reviews = new LinkedList<Review>(); 
+		this.reviews = new HashMap<Item, Review>(); 
 	}
 	
 	//METHODS 
@@ -62,6 +66,28 @@ public class Member {
 		this.password = newPassword; 
 	}
 	
+	public void addReview(Item item, Review review) {
+		/**
+	     * Save a review written by the member in the <i>SocialNetwork</i> in the historic reviews (a dictionary). 
+	     * 
+	     * @param the item reviewed by the member 
+	     * @param the review written by the member 
+	     */
+		this.reviews.put(item, review); 
+		item.addReview(review);
+		
+	}
+	
+	public Map<Item, Review> getReviews() {
+		/**
+	     * Get the historic of reviews of the member in the <i>SocialNetwork</i>  
+	     * 
+	     * @return the historic of reviews of the member 
+	     */
+		
+		return this.reviews; 
+	}
+	
 	public String toString() {
 		/**
 	     * A <i>Member</i> is described at least by member's name and description. 
@@ -70,12 +96,39 @@ public class Member {
 	     *         member's name and description.
 	     */
 		
-		String s = "Il s'agit du membre " + this.getLogin() + " dont la description est : " + this.getDescription(); 
+		String s = "Il s'agit du membre " + this.getLogin() + " dont la description est : " + this.getDescription() + "\n";
+	
+		s+= "Le membre a publié les commentaires suivants : \n"; 
+		
+		Map<Item, Review> reviews = this.getReviews(); 
+		
+		for (Item item : reviews.keySet()) {
+			s += "A propos de : " + item.getTitle() + ", \n"; 
+			s += reviews.get(item).getTitle() + "\n"; 
+			s += this.getLogin() + " a écrit : " + reviews.get(item).getComment() + "\n";
+		}
 		return s; 
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		Member bob = new Member("bob", "password", "book lover"); 
+		
+		Book book1 = new Book("The Little Prince", "book", 96, "Antoine de Saint-Exupéry"); 
+		String comment1 = "Le livre de mon enfance, je ne m'en lasse pas."; 
+		
+		Book book2 = new Book("Les Misérables", "book", 2598, "Victor Hugo"); 
+		String comment2 = "Très long mais passionnant."; 
+		
+		Review review1 = new Review(bob, "Mon avis sur Le Petit Prince", 9, comment1, book1); 
+		Review review2 = new Review(bob, "Mon avis sur Les Misérables", 7, comment2, book2); 
+		
+		bob.addReview(book1, review1);
+		bob.addReview(book2, review2);
+		
+		System.out.println(bob.toString());
+		System.out.println(book1.toString());
+		System.out.println(book2.toString());
 
 	}
 
