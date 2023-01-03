@@ -5,65 +5,62 @@ import java.util.LinkedList;
 import exceptions.*;
 
 /**
- * 
- * @author hippo
- * 
- * What is a social network without structuration and organization. We propose a solution in which people 
- * can mark films and books with some reviews. Those people are identied and repertoried in the attribute 
- * members as a LinkedList.
- *
- */
-
+	 * What is a social network without structuration and organization. We propose a solution in which people 
+	 * can mark films and books with some reviews. Those people are identied and repertoried in the attribute 
+	 * members as a LinkedList.
+	 * 
+	 * @author math & hippo
+	 * 
+	 */
 public class SocialNetwork implements ISocialNetwork {
+	
+	
 	
 	private LinkedList<Member> members;
 	
 	private LinkedList<Item> items;
 	
 	
-	/**
-	 * Constructeur d'un réseau social permettant l'initialisation des attributs de ce réseau social.
-	 */
+	
 	public SocialNetwork() {
+		/**
+		 * Constructeur d'un réseau social permettant l'initialisation des attributs de ce réseau social.
+		 */
 		this.members = new LinkedList<Member>();
 		this.items = new LinkedList<Item>();
 	}
 	
-	
-	/**
-	 * In order to display de list of members of this Social Network
-	 * @return <code>members</code>
-	 */
 	public LinkedList<Member> getMembers() {
+		/**
+		 * In order to display de list of members of this Social Network
+		 * @return <code>members</code>
+		 */
 		return this.members;
 	}
 	
-	
-	/**
-	 * In order to display de list of items of this Social Network
-	 * @return items List of items reviewed in this social network
-	 */
 	public LinkedList<Item> getItems() {
+		/**
+		 * In order to display de list of items of this Social Network
+		 * @return items List of items reviewed in this social network
+		 */
 		return this.items;
 	}
 	
-	
-	/**
-	 * Calculte and return the number of account created in the social network
-	 * @return Size of members LinkedList()
-	 */
 	@Override
 	public int nbMembers() {
+		/**
+		 * Calculte and return the number of account created in the social network
+		 * @return Size of members LinkedList()
+		 */
 		return this.members.size();
 	}
 	
-	
-	/**
-	 * Calculate and return the number of films reviewed in the social network
-	 * @return result The number of films created
-	 */
 	@Override
 	public int nbFilms() {
+		/**
+		 * Calculate and return the number of films reviewed in the social network
+		 * @return result The number of films created
+		 */
 		int result = 0;
 		for (int i = 0; i<this.items.size(); i++) {
 			if (items.get(i) instanceof Film) result++;
@@ -71,13 +68,12 @@ public class SocialNetwork implements ISocialNetwork {
 		return result;
 	}
 	
-	
-	/**
-	 * Calculate and return the number of books reviewed in the social network
-	 * @return result The number of books created
-	 */
 	@Override
 	public int nbBooks() {
+		/**
+		 * Calculate and return the number of books reviewed in the social network
+		 * @return result The number of books created
+		 */
 		int result = 0;
 		for (int i = 0; i<this.items.size(); i++) {
 			if (items.get(i) instanceof Book) result++;
@@ -85,19 +81,43 @@ public class SocialNetwork implements ISocialNetwork {
 		return result;
 	}
 	
+	public Member getMember(String login, String password) throws BadEntryException, NotMemberException {
+		
+		for (Member member:this.getMembers()) {
+			if (member.getLogin() == login) {
+				if (member.getPassword() == password) {
+					return member;
+				}
+				else {
+					throw new NotMemberException(password);
+				}
+			}
+		}
+		throw new NotMemberException(login);
+	}
 	
-	/**
-	 * Adds a member to the Social Network
-	 * 
-	 * @param login Username of the new member
-	 * @param password Password of the new member
-	 * @param description Bio of the new member
-	 */
+	
 	@Override
 	public void addMember(String login, String password, String description)
 			throws BadEntryException, MemberAlreadyExistsException {
+		/**
+		 * Adds a member to the Social Network
+		 * 
+		 * @param login Username of the new member
+		 * @param password Password of the new member
+		 * @param description Bio of the new member
+		 * @throws BadEntryException
+		 */
+		if (   !(login instanceof String) || login.replaceAll(" ", "").length() <= 1   ) 
+			throw new BadEntryException(login);
+		if (   !(password instanceof String) || password.trim().length() < 4   )
+			throw new BadEntryException(password);
+		if (   !(description instanceof String)   )
+			throw new BadEntryException(description);
+		
 		Member newMember = new Member(login, password, description);
-		if (members.indexOf(newMember) != -1) { // if the new member is in the member list
+		
+		if (!(belongsToSocialNetwork(login))) {             // if the new member is already in the member list
 			throw new MemberAlreadyExistsException(login);
 		}
 		else {
@@ -121,7 +141,8 @@ public class SocialNetwork implements ISocialNetwork {
 	@Override
 	public float reviewItemFilm(String login, String password, String title, float mark, String comment)
 			throws BadEntryException, NotMemberException, NotItemException {
-		// TODO Auto-generated method stub
+		Member member = getMember(login, password);
+		Review review = new Review(null, title, mark, comment, null);
 		return 0;
 	}
 
@@ -150,6 +171,10 @@ public class SocialNetwork implements ISocialNetwork {
 			e.printStackTrace();
 		}
 		return s;
+	}
+	
+	public static void main(String[] args) {
+		SocialNetwork sn = new SocialNetwork();
 	}
 
 }

@@ -36,6 +36,16 @@ public class Member {
 		return this.login; 
 	}
 	
+	public String getPassword() {
+		/**
+	     * Get the password of the member in the <i>SocialNetwork</i>
+	     * 
+	     * @return the password of the member in the <i>SocialNetwork</i>
+	     */
+		
+		return this.password; 
+	}
+	
 	public String getDescription() {
 		/**
 	     * Get the description of the member in the <i>SocialNetwork</i>
