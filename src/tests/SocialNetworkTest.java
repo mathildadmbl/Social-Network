@@ -680,7 +680,7 @@ public class SocialNetworkTest {
 	// System.out.println("\n\n **********************************************************************************************\n");
 	// reviewItemTest();
 	// System.out.println("\n\n **********************************************************************************************\n");
-	// consultItemsTest();
+	 consultItemsTest();
     }
 
 }

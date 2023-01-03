@@ -56,6 +56,8 @@ public interface ISocialNetwork {
      * @return number of books
      */
     public int nbBooks();
+    
+    public LinkedList<Member> getMembers(); 
 
     /**
      * Add a new member to the <i>SocialNetwork</i>
@@ -295,5 +297,8 @@ public interface ISocialNetwork {
      *         member's names, book's titles/scores and film's titles/scores.
      */
     public String toString();
+
+	public boolean rightPassword(String string, String string2);
+
 
 }

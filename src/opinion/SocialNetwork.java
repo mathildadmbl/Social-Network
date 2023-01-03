@@ -89,9 +89,10 @@ public class SocialNetwork implements ISocialNetwork {
 		String rightPassword = ""; 
 		
 		for (Member m : members) {
+			
 			if (m.getLogin() == login) {
-				rightPassword = m.getPassword(); 
-			} break; 
+				rightPassword = m.getPassword();
+			} 
 		} return password == rightPassword; 
 		
 	}
@@ -115,7 +116,7 @@ public class SocialNetwork implements ISocialNetwork {
 		LinkedList<Item> items = this.getItems(); 
 		
 		for (Item i : items) {
-			if ((title.trim().toLowerCase() == i.getTitle().toLowerCase()) && (kind == i.getKind())) return true; 
+			if ((title.trim().equalsIgnoreCase(i.getTitle().trim())) && (kind == i.getKind())) return true; 
 		} return false; 
 	}
 	
@@ -279,21 +280,55 @@ public class SocialNetwork implements ISocialNetwork {
 	@Override
 	public LinkedList<String> consultItems(String title) throws BadEntryException {
 		/**
-		 * Return a list of possible titles corresponding to a guessed title
+		 * Search items corresponding to the given title in the Social Network 
 		 * 
-		 * @param title Title guessed
+		 * @param title, the title of the item we're looking for 
 		 * 
-		 * @return s List of possible titles in the database
+		 * @return a list of String representing all items (book/film) matching the title 
 		 */
-		LinkedList<String> s = new LinkedList<String>();
-		try {
-			for (Item item:items) if (item.getTitle().contains(title)) s.add(item.getTitle());
+		
+		if (!(title instanceof String) || title.replaceAll(" ", "").length() < 1) {
+			throw new BadEntryException(title); 
 		}
-		catch (Exception e) {
-			System.out.println("Error indefined: " + e);
+		
+		// IF THE TITLE IS CORRECTLY INSTANTIATED, WE LAUNCH THE SEARCH 
+		LinkedList<String> possibleMatches = new LinkedList<String>();
+		LinkedList<Item> items = this.getItems(); 
+		
+		for (Item item : items) {
+			if (item.getTitle().equalsIgnoreCase(title.trim())) {
+				String s = item.toString() + "It has an average score of " + item.getScore(); 
+				possibleMatches.add(s); 
+			}
+		}
+		
+		return possibleMatches; 
+	}
+	
+public static void main(String[] args) {
+	
+		SocialNetwork SN = new SocialNetwork(); 
+		
+		try {
+			SN.addMember("Paul", "paul", "lecteur impulsif");
+		} catch (BadEntryException | MemberAlreadyExistsException e) {
 			e.printStackTrace();
 		}
-		return s;
+		
+		try {
+			SN.addMember("Alice", "alice", "passionnée de bande dessinée");
+		} catch (BadEntryException | MemberAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			SN.addMember("Antoine", "antoine", "grand amoureux de littérature"); 
+		} catch (BadEntryException | MemberAlreadyExistsException e) {
+			e.printStackTrace();
+		}
+		
+		boolean res = SN.rightPassword("Alice", "alice"); 
+		
 	}
 
 }
