@@ -36,6 +36,15 @@ public class Member {
 		return this.login; 
 	}
 	
+	public String getPassword() {
+		/**
+	     * Get the password of the member in the <i>SocialNetwork</i>
+	     * 
+	     * @return the password of the member in the <i>SocialNetwork</i>
+	     */
+		return this.password; 
+	}
+	
 	public String getDescription() {
 		/**
 	     * Get the description of the member in the <i>SocialNetwork</i>
@@ -96,16 +105,16 @@ public class Member {
 	     *         member's name and description.
 	     */
 		
-		String s = "Il s'agit du membre " + this.getLogin() + " dont la description est : " + this.getDescription() + "\n";
+		String s = "The member " + this.getLogin() + " has the following description : " + this.getDescription() + "\n";
 	
-		s+= "Le membre a publié les commentaires suivants : \n"; 
+		s+= "Here are all the comments he published : \n"; 
 		
 		Map<Item, Review> reviews = this.getReviews(); 
 		
 		for (Item item : reviews.keySet()) {
-			s += "A propos de : " + item.getTitle() + ", \n"; 
+			s += "About : " + item.getTitle() + ", \n"; 
 			s += reviews.get(item).getTitle() + "\n"; 
-			s += this.getLogin() + " a écrit : " + reviews.get(item).getComment() + "\n";
+			s += this.getLogin() + " wrote : " + reviews.get(item).getComment() + "\n";
 		}
 		return s; 
 	}
