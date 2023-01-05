@@ -98,9 +98,10 @@ public class SocialNetwork implements ISocialNetwork {
 		String rightPassword = ""; 
 		
 		for (Member m : members) {
+			
 			if (m.getLogin() == login) {
-				rightPassword = m.getPassword(); 
-			} break; 
+				rightPassword = m.getPassword();
+			} 
 		} return password == rightPassword; 
 		
 	}
@@ -117,7 +118,7 @@ public class SocialNetwork implements ISocialNetwork {
 		LinkedList<Item> items = this.getItems(); 
 		
 		for (Item i : items) {
-			if ((title.trim().toLowerCase() == i.getTitle().toLowerCase()) && (kind == i.getKind())) return true; 
+			if ((title.trim().equalsIgnoreCase(i.getTitle().trim())) && (kind == i.getKind())) return true; 
 		} return false; 
 	}
 	
@@ -395,21 +396,127 @@ public class SocialNetwork implements ISocialNetwork {
 	@Override
 	public LinkedList<String> consultItems(String title) throws BadEntryException {
 		/**
-		 * Return a list of possible titles corresponding to a guessed title
+		 * Search items corresponding to the given title in the Social Network 
 		 * 
-		 * @param title Title guessed
+		 * @param title, the title of the item we're looking for 
 		 * 
-		 * @return s List of possible titles in the database
+		 * @return a list of String representing all items (book/film) matching the title 
 		 */
-		LinkedList<String> s = new LinkedList<String>();
-		try {
-			for (Item item:items) if (item.getTitle().contains(title)) s.add(item.getTitle());
+		
+		if (!(title instanceof String) || title.replaceAll(" ", "").length() < 1) {
+			throw new BadEntryException(title); 
 		}
-		catch (Exception e) {
-			System.out.println("Error indefined: " + e);
+		
+		// IF THE TITLE IS CORRECTLY INSTANTIATED, WE LAUNCH THE SEARCH 
+		LinkedList<String> possibleMatches = new LinkedList<String>();
+		LinkedList<Item> items = this.getItems(); 
+		
+		for (Item item : items) {
+			//System.out.println(item);
+			if (item.getTitle().equalsIgnoreCase(title.trim())) {
+				System.out.println(item.getTitle());
+				System.out.println(title.trim());
+				System.out.println(item.getTitle().equalsIgnoreCase(title.trim())); 
+				//String s = item.toString() + "It has an average score of " + item.getScore();
+				String s = item.toString(); 
+				//System.out.println(s);
+				possibleMatches.add(s); 
+			}
+		}
+		
+		return possibleMatches; 
+	}
+	
+public static void main(String[] args) {
+	
+		SocialNetwork SN = new SocialNetwork(); 
+		
+		try {
+			SN.addMember("Paul", "paul", "lecteur impulsif");
+		} catch (BadEntryException | MemberAlreadyExistsException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	    try {
+			SN.addMember("Antoine", "antoine", "grand amoureux de littérature");
+		} catch (BadEntryException | MemberAlreadyExistsException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	    try {
+			SN.addMember("Alice", "alice", "passionnée de bande dessinée");
+		} catch (BadEntryException | MemberAlreadyExistsException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	    
+		try {
+			SN.addItemBook("Alice", "alice", "Lignes de faille", "roman", "Nancy Huston", 220);
+		} catch (BadEntryException | NotMemberException | ItemBookAlreadyExistsException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    try {
+			SN.addItemFilm("Alice", "alice", "Le train sifflera trois fois", "western 1952", "Fred Zinnemann", "Carl Foreman", 85);
+		} catch (BadEntryException | NotMemberException | ItemFilmAlreadyExistsException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    try {
+			SN.addItemBook("Paul", "paul", "La peste", "roman", " Albert Camus", 336);
+		} catch (BadEntryException | NotMemberException | ItemBookAlreadyExistsException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    try {
+			SN.addItemFilm("Paul", "paul", "Avant l'aube", "thriller 2011", "Raphael Jacoulot", "Lise Macheboeuf et Raphael Jacoulot", 104);
+		} catch (BadEntryException | NotMemberException | ItemFilmAlreadyExistsException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return s;
+	    try {
+			SN.addItemBook("Antoine", "antoine", "Guerre et Paix", "roman", "Leon Tosltoi", 1247);
+		} catch (BadEntryException | NotMemberException | ItemBookAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			SN.addItemFilm("Antoine", "antoine", "Le discours d'un roi", "drame historique 2010", "Tom Hooper", "David Seidler", 118);
+		} catch (BadEntryException | NotMemberException | ItemFilmAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			SN.addItemFilm("Alice", "alice", "Black Swan", "drame 2010", "Darren Aronofsky", "John McLaughlin et Mark Heyman et Andres Heinz", 103);
+		} catch (BadEntryException | NotMemberException | ItemFilmAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			SN.addItemBook("Alice", "alice", "Le train sifflera trois fois", "roman", " J. W. Cunningham", 257);
+		} catch (BadEntryException | NotMemberException | ItemBookAlreadyExistsException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    try {
+			SN.addItemFilm("Paul", "paul", "Guerre et Paix", "aventure historique", "King Vidor", "Bridget Boland, Robert Westbery", 200);
+		} catch (BadEntryException | NotMemberException | ItemFilmAlreadyExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	    try {
+			LinkedList<String> possibleMatches = SN.consultItems(" guerre et paix ");
+			System.out.println(possibleMatches);
+			System.out.println(possibleMatches.size());
+		} catch (BadEntryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	    
+	    
+	   
+	    
 	}
 	
 	public static void main(String[] args) {
