@@ -3,13 +3,16 @@ package opinion;
 public class Book extends Item {
 	
 	// ATTRIBUTES 
+	private String kind; 
+	
 	private int nbPages; 
 	
 	private String author; 
 	
 	// CONSTRUCTOR 
 	public Book(String title, String kind, int nbPages, String author) {
-		super(title, kind); 
+		super(title, "book"); 
+		this.kind = kind; 
 		this.nbPages = nbPages; 
 		this.author = author; 
 	}

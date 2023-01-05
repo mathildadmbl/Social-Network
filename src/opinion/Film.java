@@ -3,16 +3,21 @@ package opinion;
 public class Film extends Item {
 	
 	// ATTRIBUTES 
+	
+	private String kind; //adventure, thriller, ... 
+	
 	private String director; 
 	
 	private String scenarist; 
 	
 	private float duration; 
 	
+	
 	// CONSTRUCTOR 
 	public Film(String title, String kind, String director, String scenarist, float duration) {
 		
-		super(title, kind); 
+		super(title, "film"); 
+		this.kind = kind; 
 		this.director = director; 
 		this.scenarist = scenarist; 
 		this.duration = duration; 

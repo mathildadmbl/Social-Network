@@ -7,7 +7,7 @@ public class Item {
 	// ATTRIBUTES 
 	private String title; 
 	
-	private String kind; 
+	private String kind; //book or film 
 	
 	private LinkedList<Review> reviews; 
 	
@@ -90,7 +90,7 @@ public class Item {
 	public static void main(String[] args) {
 		
 		String title1 = "The Little Prince"; 
-		String kind1 = "book";
+		String kind1 = "roman";
 		String author1 = "Antoine de Saint-Exupéry"; 
 		
 		Book book1 = new Book(title1, kind1, 96, author1); 
