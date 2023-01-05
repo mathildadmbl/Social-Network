@@ -78,9 +78,9 @@ public class Review {
 	     * the comment written and the mark attributed.
 	     */
 		
-		String s = "L'utilisateur " + this.getWriter().getLogin() + " a attribué la note de " + this.getMark(); 
+		String s = "The user " + this.getWriter().getLogin() + " has given a mark of " + this.getMark() + " out of 10"; 
 		
-		s+= " à l'oeuvre intitulée " + this.getItem().getTitle(); 
+		s+= " to the item entitled " + this.getItem().getTitle(); 
 		
 				
 		return s; 

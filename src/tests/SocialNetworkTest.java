@@ -543,8 +543,71 @@ public class SocialNetworkTest {
 
     public static void reviewItemTest() {
 	System.out.println("Tests  de reviewing d'items du réseau social  ");
-	// to complete
 
+	int nbMembres = 0;
+	int nbLivres = 0;
+	int nbFilms = 0;
+		
+	// un réseau social créé ne doit avoir ni membres ni items
+	ISocialNetwork sn = new SocialNetwork();
+	
+	try {
+			
+	    // ajout de 3 membres avec entrées "correctes"
+	    nbMembres = sn.nbMembers();
+	    sn.addMember("Paul", "paul", "lecteur impulsif");
+	    sn.addMember("Antoine", "antoine", "grand amoureux de littérature");
+	    sn.addMember("Alice", "alice", "passionnée de bande dessinée");
+	    if (sn.nbMembers()!= (nbMembres + 3)) 
+		System.out.println("Erreur 3.6 :  le nombre de membres après ajout de 3 membres n'a pas augmenté de 3");
+
+	    // ajout de 3 livres et 4 films "corrects"
+	    nbLivres = sn.nbBooks();
+	    nbFilms = sn.nbFilms();
+	    sn.addItemBook("Alice", "alice", "Lignes de faille", "roman", "Nancy Huston", 220);
+	    sn.addItemFilm("Alice", "alice", "Le train sifflera trois fois", "western 1952", "Fred Zinnemann", "Carl Foreman", 85);
+	    sn.addItemBook("Paul", "paul", "La peste", "roman", " Albert Camus", 336);
+	    sn.addItemFilm("Paul", "paul", "Avant l'aube", "thriller 2011", "Raphael Jacoulot", "Lise Macheboeuf et Raphael Jacoulot", 104);
+	    sn.addItemBook("Antoine", "antoine", "Guerre et Paix", "roman", "Leon Tosltoi", 1247);
+	    sn.addItemFilm("Antoine", "antoine", "Le discours d'un roi", "drame historique 2010", "Tom Hooper", "David Seidler", 118);
+	    sn.addItemFilm("Alice", "alice", "Black Swan", "drame 2010", "Darren Aronofsky", "John McLaughlin et Mark Heyman et Andres Heinz", 103);
+	    sn.addItemBook("Alice", "alice", "Le train sifflera trois fois", "roman", " J. W. Cunningham", 257);
+	    sn.addItemFilm("Paul", "paul", "Guerre et Paix", "aventure historique", "King Vidor", "Bridget Boland, Robert Westbery", 200);
+	    // review d'un film et d'un livre ayant le même titre et par plusieurs
+	    
+			
+	    nbMembres = sn.nbMembers();
+	    nbFilms = sn.nbFilms();
+	    nbLivres = sn.nbBooks();
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+	
+	try {
+		sn.reviewItemFilm("Alice", "alice", "Guerre et Paix", 4.5f, "on ne voit pas le temps passer");
+	} catch (BadEntryException | NotMemberException | NotItemException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    try {
+		sn.reviewItemFilm("Antoine", "antoine", "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
+	} catch (BadEntryException | NotMemberException | NotItemException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    try {
+		sn.reviewItemBook("Alice", "alice", "Guerre et Paix", 2.0f, "un peu long");
+	} catch (BadEntryException | NotMemberException | NotItemException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    try {
+		sn.reviewItemBook("Paul", "paul", "Guerre et Paix", 3.0f, "un peu long");
+	} catch (BadEntryException | NotMemberException | NotItemException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
 
     
@@ -678,7 +741,7 @@ public class SocialNetworkTest {
 	// System.out.println("\n\n **********************************************************************************************\n");
 	// addItemTest();
 	// System.out.println("\n\n **********************************************************************************************\n");
-	// reviewItemTest();
+	reviewItemTest();
 	// System.out.println("\n\n **********************************************************************************************\n");
 	// consultItemsTest();
     }
