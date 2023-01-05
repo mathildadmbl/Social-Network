@@ -3,21 +3,25 @@ package opinion;
 public class Book extends Item {
 	
 	// ATTRIBUTES 
-	private String kind; 
+	private String genre; 
 	
 	private int nbPages; 
 	
 	private String author; 
 	
 	// CONSTRUCTOR 
-	public Book(String title, String kind, int nbPages, String author) {
+	public Book(String title, String genre, int nbPages, String author) {
 		super(title, "book"); 
-		this.kind = kind; 
+		this.genre = genre; 
 		this.nbPages = nbPages; 
 		this.author = author; 
 	}
 	
 	//METHODS 
+	
+	public String getGenre() {
+		return this.genre; 
+	}
 	
 	public String getAuthor() {
 		/**
@@ -46,7 +50,7 @@ public class Book extends Item {
 	     *         its title, its author and the number of pages.
 	     */
 		
-		String s = "The book entitled " + this.getTitle() + " and written by " + this.getAuthor() + " is " + this.getNbPages() + " pages long." ;
+		String s = "The book entitled " + this.getTitle() + " from the genre " + this.getGenre() + " and written by " + this.getAuthor() + " is " + this.getNbPages() + " pages long." ;
 		s += super.toString(); 
 		
 		return s; 

@@ -4,7 +4,7 @@ public class Film extends Item {
 	
 	// ATTRIBUTES 
 	
-	private String kind; //adventure, thriller, ... 
+	private String genre; //adventure, thriller, ... 
 	
 	private String director; 
 	
@@ -14,16 +14,20 @@ public class Film extends Item {
 	
 	
 	// CONSTRUCTOR 
-	public Film(String title, String kind, String director, String scenarist, float duration) {
+	public Film(String title, String genre, String director, String scenarist, float duration) {
 		
 		super(title, "film"); 
-		this.kind = kind; 
+		this.genre = genre; 
 		this.director = director; 
 		this.scenarist = scenarist; 
 		this.duration = duration; 
 	}
 	
 	// METHODS 
+	
+	public String getGenre() {
+		return this.genre; 
+	}
 	
 	public String getDirector() {
 		/**
@@ -61,7 +65,7 @@ public class Film extends Item {
 	     *         its title, its director and scenarist and its duration. 
 	     */
 		
-		String s = "The film entitled " + this.getTitle() + " directed by " + this.getDirector() + " and scenarized by " + this.getScenarist() + " is " + this.getDuration() + " hours long. ";
+		String s = "The film entitled " + this.getTitle() + " from the genre " + this.getGenre() + " directed by " + this.getDirector() + " and scenarized by " + this.getScenarist() + " is " + this.getDuration() + " hours long. ";
 		s += super.toString(); 
 		
 		return s; 
