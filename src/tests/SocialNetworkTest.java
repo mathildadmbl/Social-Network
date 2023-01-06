@@ -7,7 +7,11 @@ import exceptions.ItemFilmAlreadyExistsException;
 import exceptions.ItemBookAlreadyExistsException;
 import exceptions.NotMemberException;
 import exceptions.NotItemException;
+
+import java.io.Serializable;
 import java.util.LinkedList;
+
+import opinion.*;
 
 public class SocialNetworkTest {
 
@@ -545,11 +549,11 @@ public class SocialNetworkTest {
 	System.out.println("Tests  de reviewing d'items du réseau social  ");
 
 	int nbMembres = 0;
-	int nbLivres = 0;
-	int nbFilms = 0;
+	//int nbLivres = 0;
+	//int nbFilms = 0;
 		
 	// un réseau social créé ne doit avoir ni membres ni items
-	ISocialNetwork sn = new SocialNetwork();
+	SocialNetwork sn = new SocialNetwork();
 	
 	try {
 			
@@ -562,8 +566,8 @@ public class SocialNetworkTest {
 		System.out.println("Erreur 3.6 :  le nombre de membres après ajout de 3 membres n'a pas augmenté de 3");
 
 	    // ajout de 3 livres et 4 films "corrects"
-	    nbLivres = sn.nbBooks();
-	    nbFilms = sn.nbFilms();
+	    //nbLivres = sn.nbBooks();
+	    //nbFilms = sn.nbFilms();
 	    sn.addItemBook("Alice", "alice", "Lignes de faille", "roman", "Nancy Huston", 220);
 	    sn.addItemFilm("Alice", "alice", "Le train sifflera trois fois", "western 1952", "Fred Zinnemann", "Carl Foreman", 85);
 	    sn.addItemBook("Paul", "paul", "La peste", "roman", " Albert Camus", 336);
@@ -577,8 +581,8 @@ public class SocialNetworkTest {
 	    
 			
 	    nbMembres = sn.nbMembers();
-	    nbFilms = sn.nbFilms();
-	    nbLivres = sn.nbBooks();
+	    //nbFilms = sn.nbFilms();
+	    //nbLivres = sn.nbBooks();
     } catch (Exception e) {
 	    System.out.println("Exception non prévue : " + e);
 	    e.printStackTrace();
@@ -587,27 +591,181 @@ public class SocialNetworkTest {
 	try {
 		sn.reviewItemFilm("Alice", "alice", "Guerre et Paix", 4.5f, "on ne voit pas le temps passer");
 	} catch (BadEntryException | NotMemberException | NotItemException e) {
-		// TODO Auto-generated catch block
+		System.out.println("Exception non prévue : " + e);
 		e.printStackTrace();
 	}
     try {
 		sn.reviewItemFilm("Antoine", "antoine", "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
 	} catch (BadEntryException | NotMemberException | NotItemException e) {
-		// TODO Auto-generated catch block
+		System.out.println("Exception non prévue : " + e);
 		e.printStackTrace();
 	}
     try {
 		sn.reviewItemBook("Alice", "alice", "Guerre et Paix", 2.0f, "un peu long");
 	} catch (BadEntryException | NotMemberException | NotItemException e) {
-		// TODO Auto-generated catch block
+		System.out.println("Exception non prévue : " + e);
 		e.printStackTrace();
 	}
     try {
 		sn.reviewItemBook("Paul", "paul", "Guerre et Paix", 3.0f, "un peu long");
 	} catch (BadEntryException | NotMemberException | NotItemException e) {
-		// TODO Auto-generated catch block
+		System.out.println("Exception non prévue : " + e);
 		e.printStackTrace();
 	}
+    
+    int nbReviews = sn.getItem("Guerre et Paix", "film").getReviews().size();
+    
+    try {
+    	sn.reviewItemFilm(null, "antoine", "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.1 :  l'ajout d'une review de film avec un login qui n'est pas instancié est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.1 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("    ", "antoine", "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.2 :  l'ajout d'une review de film avec un login qui ne contient rien d'autre que des espaces est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.2 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", null, "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.3 :  l'ajout d'une review de film avec un password qui n'est pas instancié est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.3 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "  FF   ", "Guerre et Paix", 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.4 :  l'ajout d'une review de film avec un password qui contient moins de 4 caractères hors espaces est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.4 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", null, 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.5 :  l'ajout d'une review de film dont le titre n'est pas instancié est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.5 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", "    ", 3.5f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.6 :  l'ajout d'une review de film dont le titre qui ne contient rien d'autre que des espaces est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.6 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", "fekkhf", 3.5f, null);
+    	System.out.println("Erreur 9.0.7 :  l'ajout d'une review de film dont le commentaire n'est pas instancié est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.7 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", "Guerre et Paix", 56.0f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.8 :  l'ajout d'une review de film dont la note est supérieure à 5 est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.8 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", "Guerre et Paix", -5.0f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.0.9 :  l'ajout d'une review de film dont la note est inférieure à 0 est accepté ");
+    } catch (BadEntryException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.0.9 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+	    System.out.println("Exception non prévue : " + e);
+	    e.printStackTrace();
+	}
+    try {
+    	sn.reviewItemFilm("hbfiehiugee", "antoine", "Guerre et Paix", 3.6f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.1.1 :  l'ajout d'une review de film par un membre inexistant est accepté ");
+    } catch (NotMemberException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.1.1 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+    	System.out.println("Exception non prévue : " + e);
+    	e.printStackTrace();
+    }
+    try {
+    	sn.reviewItemFilm("Antoine", "ddddddd", "Guerre et Paix", 3.6f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.1.2 :  l'ajout d'une review de film par un membre mal authentifié (mot de passe erroné) est accepté ");
+    } catch (NotMemberException e) {
+    	if (sn.getItem("Guerre et Paix", "film").getReviews().size() != nbReviews) 
+    		System.out.println("Erreur 9.1.2 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+    	System.out.println("Exception non prévue : " + e);
+    	e.printStackTrace();
+    }
+    try {
+    	sn.reviewItemFilm("Antoine", "antoine", "lejfkjef", 3.6f, "on ne voit pas le temps passer");
+    	System.out.println("Erreur 9.2 :  l'ajout d'une review de film d'un titre inexistant est accepté ");
+    } catch (NotItemException e) {
+    	if (sn.getItem("lejfkjef", "film") != null) 
+    		System.out.println("Erreur 9.2 :  le nombre de reviews après tentative d'ajout refusée a été modifié");
+    } catch (Exception e) {
+    	System.out.println("Exception non prévue : " + e);
+    	e.printStackTrace();
+    }
+    
+    
+    
+    try {
+		sn.reviewItemBook("Alice", "alice", "Guerre et Paix", 2.0f, "un peu long");
+	} catch (Exception e) {
+		System.out.println("Exception non prévue : " + e);
+		e.printStackTrace();
+	}
+    Item i = sn.getItem("Guerre et paix", "film");
+    LinkedList<Review> r = i.getReviews();
+    Review lastReview = r.getLast();
+    try {
+		sn.reviewItemBook("Paul", "paul", "Guerre et Paix", 3.0f, "un peu long");
+	} catch (BadEntryException | NotMemberException | NotItemException e) {
+		System.out.println("Exception non prévue : " + e);
+		e.printStackTrace();
+	}
+    if (!lastReview.equals(r.getLast())) System.out.println("Erreur 45.5 : la review n'a pas été ajoutée au tableau");
+    
+    
+    try {
+    	Serializable result = sn.reviewItemBook("Paul", "paul", "Guerre et Paix", 3.0f, "un peu long");
+    	if (!(result instanceof Float))
+    		System.out.println("Erreur 17.5.1 : The method review does not return a float");
+    	else if ( ((Float) result > 5.0f || (Float) result < 0.0f) )
+    		System.out.println("Erreur 17.5.2 : The method review does not return "+result+" a float between 0 and 5");
+    } catch (BadEntryException | NotMemberException | NotItemException e) {
+    	System.out.println("Exception non prévue : " + e);
+    }
+    
     }
 
     
@@ -737,13 +895,13 @@ public class SocialNetworkTest {
     public static void main(String[] args) {
 	initialisationTest();
 	System.out.println("\n\n **********************************************************************************************\n");
-	// addMemberTest();
-	// System.out.println("\n\n **********************************************************************************************\n");
-	// addItemTest();
-	// System.out.println("\n\n **********************************************************************************************\n");
+	addMemberTest();
+	System.out.println("\n\n **********************************************************************************************\n");
+	addItemTest();
+	System.out.println("\n\n **********************************************************************************************\n");
 	reviewItemTest();
 	// System.out.println("\n\n **********************************************************************************************\n");
-	 consultItemsTest();
+	// consultItemsTest();
     }
 
 }

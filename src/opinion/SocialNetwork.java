@@ -122,18 +122,18 @@ public class SocialNetwork implements ISocialNetwork {
 		} return false; 
 	}
 	
-	
+	/**
+	 * Search for an Item by his title and his kind
+	 * @param title, the title of the item researched
+	 * @param kind, the kind of the item researched
+	 * @return item researched
+	 */
 	public Item getItem(String title, String kind) {
-		/**
-		 * Search for an Item by his title and his kind
-		 * @param title, the title of the item researched
-		 * @param kind, the kind of the item researched
-		 * @return item researched
-		 */
+		
 		LinkedList<Item> items = this.getItems(); 
 		
 		for (Item i : items) {
-			if ((title.trim().toLowerCase() == i.getTitle().toLowerCase()) && (kind == i.getKind())) return i; 
+			if ((title.trim().equalsIgnoreCase(i.getTitle().trim())) && (kind == i.getKind())) return i; 
 		}
 		return null;
 	}
@@ -339,7 +339,7 @@ public class SocialNetwork implements ISocialNetwork {
 		
 		// NOT MEMBER EXCEPTION
 		if (!this.belongsToSocialNetwork(login)) throw new NotMemberException(login);
-		if (this.rightPassword(login, password)) throw new NotMemberException(password);
+		if (!this.rightPassword(login, password)) throw new NotMemberException(password);
 		
 		// NOT ITEM EXCEPTION
 		Item item = this.getItem(title, "film");
@@ -380,7 +380,7 @@ public class SocialNetwork implements ISocialNetwork {
 		
 		// NOT MEMBER EXCEPTION
 		if (!this.belongsToSocialNetwork(login)) throw new NotMemberException(login);
-		if (this.rightPassword(login, password)) throw new NotMemberException(password);
+		if (!this.rightPassword(login, password)) throw new NotMemberException(password);
 		
 		// NOT ITEM EXCEPTION
 		Item item = this.getItem(title, "book");
@@ -514,8 +514,7 @@ public static void main(String[] args) {
 			e.printStackTrace();
 		} 
 	    
-	    
-	   
+	    System.out.println(SN.getItem("Guerre et Paix", "book"));
 	    
 	}
 
